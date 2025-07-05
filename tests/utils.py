@@ -1,3 +1,4 @@
+import psutil
 import statistics
 
 def print_latency_summary(name, latencies):
@@ -13,3 +14,8 @@ def print_latency_summary(name, latencies):
         print(f"Stdev: {statistics.stdev(latencies):.2f} ms")
     else:
         print("Stdev: N/A (only one data point)")
+
+def log_resources():
+    cpu = psutil.cpu_percent()
+    mem = psutil.virtual_memory().percent
+    print(f"🧠 CPU: {cpu:.1f}% | Memory: {mem:.1f}%")
