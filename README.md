@@ -17,3 +17,9 @@ Run deep learning inference on your local machine with real-time performance!
 - CUDA-enabled PyTorch
 
 ---
+
+From the project root, run below with replace your ip adress
+
+uvicorn app.main:app --host 172.19.75.30 --port 8000 --reload
+
+---
