@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from PIL import Image
-from model import predict_image
+from app.model import predict_image
+from app.utils import log_latency
 import io
 
 app = FastAPI()
@@ -9,5 +10,6 @@ app = FastAPI()
 async def predict(file: UploadFile = File(...)):
     image_bytes = await file.read()
     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    predictions = predict_image(image)
-    return {"predictions": predictions}
+    predictions, latency = predict_image(image)
+    log_latency(latency)
+    return {"predictions": predictions, "latency_ms": round(latency, 2)}

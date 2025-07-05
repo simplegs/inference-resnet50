@@ -1,3 +1,4 @@
+import time
 import torch
 from torchvision import models, transforms
 from PIL import Image
@@ -22,8 +23,17 @@ labels = models.ResNet50_Weights.DEFAULT.meta["categories"]
 
 def predict_image(image: Image.Image):
     input_tensor = preprocess(image).unsqueeze(0).to(device)
+
+    start = time.perf_counter()
     with torch.no_grad():
         output = model(input_tensor)
-        probs = torch.nn.functional.softmax(output[0], dim=0)
-        top5 = torch.topk(probs, 5)
-    return [(labels[idx], round(probs[idx].item(), 4)) for idx in top5.indices]
+    end = time.perf_counter()
+
+    # Get top 5 predictions
+    probs = torch.nn.functional.softmax(output[0], dim=0)
+    top5 = torch.topk(probs, 5)
+    result = [(labels[idx], round(probs[idx].item(), 4)) for idx in top5.indices]
+
+    latency = (end - start) * 1000  # Convert to milliseconds
+    print(f"[FastAPI] latency_ms returned: {latency:.2f} ms")
+    return result, latency
