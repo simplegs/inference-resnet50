@@ -24,3 +24,14 @@ From the project root, run below with replace your ip adress
 uvicorn app.main:app --host 172.19.75.30 --port 8000 --reload
 
 ---
+
+Docker command
+
+docker build -t resnet50-api .
+# allow 8000 port from you computer
+docker run -p 8000:8080 resnet50-api
+
+Access:
+http://localhost:8000/docs
+
+---
