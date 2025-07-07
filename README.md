@@ -18,10 +18,11 @@ Run deep learning inference on your local machine with real-time performance!
 
 ---
 
-From the project root, run below with replace your ip adress
+From the project root, run the command below after replacing your IP address:
 
 ```bash
 uvicorn app.main:app --host 172.19.75.30 --port 8000 --reload
+```
 
 ---
 
