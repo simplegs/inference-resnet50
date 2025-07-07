@@ -41,7 +41,7 @@ def load_image_bytes_once():
 async def send_request_async(client):
     image_bytes = load_image_bytes_once()
     if image_bytes is None:
-        return None, None
+        return None, None, None
 
     file_like_object = io.BytesIO(image_bytes)
     files = {"file": ("cat.jpg", file_like_object, "image/jpeg")}
@@ -52,17 +52,17 @@ async def send_request_async(client):
         request_duration = (time.perf_counter() - start) * 1000
     except httpx.RequestError as e:
         print(f"❌ Network error: {e}")
-        return None, None
+        return None, None, None
 
     try:
         prediction = response.json()
     except Exception as e:
         print(f"❌ JSON parse error: {e}")
-        return None, None
+        return None, None, None
 
     if response.status_code != 200:
         print(f"❌ HTTP {response.status_code}: {prediction}")
-        return None, None
+        return None, None, None
 
     total_client_duration = (time.perf_counter() - start) * 1000  # ms
     return request_duration, total_client_duration, prediction
